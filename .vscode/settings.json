@@ -1,6 +1,18 @@
 {
   "cSpell.language": "en,ru",
   "cSpell.words": [
-    "logcfg"
+    "Descr",
+    "EXCP",
+    "EXCPCNTX",
+    "fromsrvc",
+    "logcfg",
+    "ragent",
+    "reghost",
+    "regport",
+    "rphost",
+    "SDBL",
+    "TDEADLOCK",
+    "TLOCK",
+    "TTIMEOUT"
   ]
 }

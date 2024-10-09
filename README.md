@@ -180,7 +180,7 @@
 >
 >В результате мы можем увидеть сообщения типа (сообщение приведено не полностью, так как правило очень объемное):
 >
->```
+>```bsl
 >09:10.883004-0,LEAKS,1,level=DEBUG,process=rphost,OSThread=38724,t:clientID=21,t:applicationName=BackgroundJob,t:computerName=haflingmax,t:connectID=1156,Descr='
 >KeyAndValue:
 >ОбщийМодуль.УтечкиПамяти.Модуль : 4 : СоздатьУтечкуМин();

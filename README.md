@@ -174,7 +174,9 @@
 >```
 >Скрипт поиска утечек памяти с выгрузкой результат в файл:
 >
->` cat rphost_*/*.log | awk -vORS= '{if($0 ~ /^[0-9][0-9]:/){ print "\n"$0 }else{ print "@"$0 }}' | grep -E ',LEAKS' | sed 's/@/\n/g' | tee ../logs.log`
+>```bash
+> cat rphost_*/*.log | awk -vORS= '{if($0 ~ /^[0-9][0-9]:/){ print "\n"$0 }else{ print "@"$0 }}' | grep -E ',LEAKS' | sed 's/@/\n/g' | tee ../logs.log
+>```
 >
 >В результате мы можем увидеть сообщения типа (сообщение приведено не полностью, так как правило очень объемное):
 >
@@ -195,5 +197,8 @@
 >
 >Так же не будет лишним проверить, какие события в системе потребляют наибольшее количество памяти. Скрипт парсинга ТЖ:
 >
->
+>```bash
+>cat rphost_*/*.log | awk -vORS= '{if($0 ~ /^[0-9][0-9]:/){ print "\n"$0 }else{ print "@"$0 }}' | grep -E ',CALL.*,Context' | sed 's/^.*,Context=//g' | sed 's/,[A-z]*=.*MemoryPeak=/MemoryPeak=/g' | awk -F 'MemoryPeak=' '{ count[$1] += 1; sumMemory[$1] += $2;} END { for(i in count){ print "Count: "count[i]", MemorySum: "sumMemory[i]" = "i"\n" }}' | sort -nrb -k 4 -t " " | sed -r 's/@/\n/g' | tee ../result.logs
+>```
+ 
 >

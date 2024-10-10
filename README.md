@@ -198,7 +198,7 @@
 >Так же не будет лишним проверить, какие события в системе потребляют наибольшее количество памяти. Скрипт парсинга ТЖ:
 >
 >```bash
->cat rphost_*/*.log | awk -vORS= '{if($0 ~ /^[0-9][0-9]:/){ print "\n"$0 }else{ print "@"$0 }}' | grep -E ',CALL.*,Context' | sed 's/^.*,Context=//g' | sed 's/,[A-z]*=.*MemoryPeak=/MemoryPeak=/g' | awk -F 'MemoryPeak=' '{ count[$1] += 1; sumMemory[$1] += $2;} END { for(i in count){ print "Count: "count[i]", MemorySum: "sumMemory[i]" = "i"\n" }}' | sort -nrb -k 4 -t " " | sed -r 's/@/\n/g' | tee ../result.logs
+>cat rphost_10016/*.log | awk -vORS= '{if($0 ~ /^[0-9][0-9]:/){ print "\n"$0 }else{ print "@"$0 }}' | grep -e ',CALL.*processName=v83.*Module=' | sed 's/^.*,Module=//' | sed 's/,Method=/:/' | sed 's/,.*Memory=/,/' | awk -F ',' '{ sumMemory[$1] += $2; } END { for(i in sumMemory) { print i": "sumMemory[i]/1000000 } }' | sort -nrb -k 2 | sed 's/@/\n/g' | tee ../logs.log
 >```
  
 >

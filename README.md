@@ -272,3 +272,5 @@ AUTO_UPDATE_STATISTICS_ASYNC - если установить данный пар
 >RECONFIGURE WITH OVERRIDE;  
 >GO 
 > ```
+
+#### 1.2. Индексы

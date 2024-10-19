@@ -274,3 +274,48 @@ AUTO_UPDATE_STATISTICS_ASYNC - если установить данный пар
 > ```
 
 #### 1.2. Индексы
+Основная проблема индексов - **фрагметация**. Ядро СУБД автоматически изменяет индексы при каждом выполнении операций вставки, обновления или удаления в базовые данные. Спустя время возникает ситуация, когда для некоторых страниц индекса логический порядок, основанный на значении ключа, не совпадает с физическим порядком страниц индексов, что приведет к понижению производительности.
+
+Дефрагментация индексов происходит при помощи операций - реорганизации или перестроения.
+
+##### 1. Посмотреть текущий уровень фрагментации индексов:
+```sql
+SELECT 
+  objects.name AS objectName, 
+  indexes.name AS indexName,
+  index_stats.index_type_desc, 
+  index_stats.index_depth, 
+  index_stats.avg_fragmentation_in_percent 
+FROM sys.objects AS objects 
+LEFT JOIN sys.indexes AS indexes
+  ON objects.object_id = indexes.object_id
+LEFT JOIN sys.dm_db_index_physical_stats(DB_ID(), NULL, NULL, NULL, NUll) AS index_stats
+  ON indexes.index_id = index_stats.index_id
+WHERE NOT indexes.name is NULL
+ORDER BY 
+  index_stats.avg_fragmentation_in_percent DESC, 
+  objectName, 
+  indexes.name;
+```
+
+##### 2. Реорганизация индекса (дефрагментация)
+###### 2.1. Реорганизация всех индексов в таблице:
+```sql
+ALTER INDEX ALL ON <Table> REORGANIZE; 
+```
+>[!NOTE]Важно! Начиная с версии платформы 8.3.22 необходимо выполнять дефрагментацию индексов по следующему алгоритму:
+>
+>- До дефрагментации индекса необходимо включить страничные блокировки. Пример команды: 
+>```sql
+>ALTER INDEX index_name ON table_name SET (ALLOW_PAGE_LOCKS = ON, >ALLOW_ROW_LOCKS = ON);
+>```
+>- Выполнить дефрагментацию.
+>- Обратно выключить страничные блокировки. Пример команды: 
+>```sql
+>ALTER INDEX index_name ON table_name SET (ALLOW_PAGE_LOCKS = OFF, ALLOW_ROW_LOCKS = ON);
+>```
+
+##### 3. Перестройка индекса
+```sql
+
+```
